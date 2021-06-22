@@ -10,6 +10,10 @@ const Protected = () => {
     const [ fault, setFault ] = useState("");
     const [ error, setError ] = useState("");
     const [ feedback, setFeedback ] = useState("");
+    const [ UserID, setUserID ] = useState("");
+    const [ feedbackBody, setFeedbackBody ] = useState("");
+    const [ rating, setRating ] = useState("");
+
     const dataHandler = async (e) => {
         const test = Cookies.get('userAuth');
         const headers = {
@@ -27,7 +31,8 @@ const Protected = () => {
                 }
             })
             const userid = response.data.msg._id;
-            console.log(userid);
+            setUserID(userid)
+            console.log(UserID);
             const feedbacks = await axios.get(`http://localhost:5000/feedback/${userid}`, {}, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
@@ -36,10 +41,29 @@ const Protected = () => {
                     Authorization: test,
                 }
             })
-            setFeedback(feedbacks.data)
-            console.log(feedbacks.data);
+            const feedbackdata = feedbacks.data; 
+            setFeedback(feedbackdata)
+            console.log(feedbackdata);
             console.log(response.data);
             setData(response.data.msg);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const FeedbackWidget = async (e) => {
+        e.preventDefault();
+        const headers = {
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Credentials": true,
+        };
+        try {
+            const feedbackPost = await axios.post(`http://localhost:5000/feedback/${UserID}`, {
+                user: UserID,
+                body:feedbackBody,
+                rating:5
+            }, {headers})
+            console.log(feedbackPost);
         } catch (error) {
             console.log(error);
         }
@@ -53,6 +77,16 @@ const Protected = () => {
             <h2>{JSON.stringify(data)}</h2>
             <h1>Feedback:</h1>
             <h3>{JSON.stringify(feedback[0])}</h3>
+            <br/>
+            <form onSubmit={FeedbackWidget}>
+                <input 
+                placeholder="Feedback body" 
+                id="feedback-body" 
+                value={feedbackBody} 
+                onChange={(e) => {setFeedbackBody(e.target.value)}}/> 
+                <input placeholder="rating"></input>
+                <button type="submit" className="btn btn-primary">Submit Data</button>
+                </form>
             </center>
         </div>
     )
