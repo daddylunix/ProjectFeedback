@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from 'axios';
 import {Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import Feedback from "../Feedback";
 
 // Protected Route
 
@@ -75,8 +76,9 @@ const Protected = () => {
         <div>
             <center>
             <h2>{JSON.stringify(data)}</h2>
-            <h1>Feedback:</h1>
-            <h3>{JSON.stringify(feedback[0])}</h3>
+                <Feedback
+                    feedback={feedback}
+                />
             <br/>
             <form onSubmit={FeedbackWidget}>
                 <input 

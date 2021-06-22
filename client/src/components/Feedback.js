@@ -3,21 +3,14 @@ import axios from 'axios';
 import {Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
-const Feedback = () => {
-    const [ feedback, setFeedback ] = useState("");
-    const userid = Cookies.get('userAuth');
-    const fetchData = async (e) => {
-        const headers = {
-            'Content-Type': 'application/json;charset=UTF-8',
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": true,
-        };
-        
-    }
+const Feedback = (props) => {
+    const { feedback } = props;
+
     
     return (
         <div>
-            
+            <h1>Feedback:</h1>
+            {feedback?.map(feedbackItem => <h3>{JSON.stringify(feedbackItem)}</h3>)}
         </div>
     )
 }
