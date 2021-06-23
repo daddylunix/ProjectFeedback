@@ -3,17 +3,18 @@ import axios from 'axios';
 import {Link, useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
-const RegisterScreen = () => {
+const Register = () => {
     const [ username, setUsername ] = useState("");
     const [ email, setEmail ] = useState("");
     const [ password, setPassword ] = useState("");
     const [ error, setError ] = useState("");
     const [ responseData, setResponseData ] = useState("");
     const history = useHistory();
+
     const registerHandler = async (e) => {
         e.preventDefault();
         const config = {
-            header: {
+            headers: {
                 "Content-Type":" application/json"
             }
         }
@@ -26,7 +27,7 @@ const RegisterScreen = () => {
             history.push("/protected");
 
         } catch (error) {
-            setError(JSON.stringify(error));
+            setError(error.response.data.message);
             console.log(error);
         }
     }
@@ -63,4 +64,4 @@ const RegisterScreen = () => {
     )
 }
 
-export default RegisterScreen;
+export default Register;

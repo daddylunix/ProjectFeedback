@@ -1,12 +1,14 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+const ApiError = require("../utils/apiError");
 
 exports.register = async (req, res, next ) => {
-    if (req.body.password.length < 6) {
-        res.status(400).json({success:false, error:"Password too short"})
-    } else {
         try {
+            if (req.body.password.length < 6) {
+                throw new ApiError("Password too short", 400)
+            }
+
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(req.body.password, salt);
             const user = await User.create({
@@ -20,34 +22,29 @@ exports.register = async (req, res, next ) => {
                 token:token
             })
         } catch (error) {
-            res.status(500).json({
-                success: false,
-                error: error.message
-            })
-        } }
+            next(error);
+        }
 };
 
 exports.login = async (req, res, next ) => {
     if (!req.body.email || !req.body.password ) {
-        res.status(400).json({ success: false, error: "Please provide email and password"});
-        return;
+        throw new ApiError("Please provide email and password", 400);
     }
+
     try {
         const user = await User.findOne({email: req.body.email});
         if (!user) {
-            res.status(404).json({success: false, error:"Invalid credentials"})
-            return;
+            throw new ApiError("Invalid credentials", 401);
         }
         const isMatch = await bcrypt.compare(req.body.password, user.password);
-        if (!isMatch) res.status(400).json({success: false, error: "Invalid Credentials"})
+        if (!isMatch) throw new ApiError("Invalid credentials", 401);
+
         const token = await jwt.sign({ id: user._id }, "secretTokenHere")
-        res.status(201).json({
-            success: true,
+        res.status(200).json({
             token:token
         })
     } catch (error) {
-        res.status(500).json({success: false, error: error.message});
-        return;
+        next(error);
     }
 };
 

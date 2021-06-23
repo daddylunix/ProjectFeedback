@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import Feedback from "../Feedback";
+import Feedback from "../components/Feedback";
 
 const Protected = () => {
     const history = useHistory();
     const [ data, setData ] = useState("");
+    const [ error, setError ] = useState("");
     const [ userID, setUserID ] = useState("");
 
 
@@ -15,20 +16,29 @@ const Protected = () => {
             if(!test) {
                 history.push('/register')
             }
+
             try {
                 const response = await axios.get('http://localhost:5000/dashboard',  {
                     headers: {
                         "Access-Control-Allow-Origin": "*",
                         "Access-Control-Allow-Credentials": true,
                         "Content-Type": "application/json",
-                        Authorization: test,
+                        Authorization: test
                     }
                 })
+
+
                 const userid = response.data.msg._id;
                 setUserID(userid)
                 setData(response.data.msg);
+                if(error){
+                    setError('');
+                }
             } catch (error) {
-                console.log(error);
+                const errorResponse = error.response.data;
+                if(errorResponse){
+                    setError(errorResponse.message);
+                }
             }
     }
 
@@ -44,6 +54,7 @@ const Protected = () => {
                 <Feedback
                     userID={userID}
                 />
+                <span>{error}</span>
             </center>
         </div>
     )

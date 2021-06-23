@@ -21,6 +21,7 @@ const UserSchema = new mongoose.Schema({
     resetPasswordExpire: Date
 });
 
+
 UserSchema.methods.matchPasswords = async (password) => {
     return await bcrypt.compare(password, this.password);
 }

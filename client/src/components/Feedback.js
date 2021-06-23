@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
+
 import socketIOClient  from "socket.io-client";
 
 
 const Feedback = (props) => {
     const { userID } = props;
-
     const [feedback, setFeedback] = useState([]);
     const [feedbackRequest, setFeedbackRequest] = useState();
     const [response, setResponse] = useState([]);
@@ -23,8 +23,7 @@ const Feedback = (props) => {
 
     }, [userID])
 
-    const postFeedback = async (e) => {
-        e.preventDefault();
+    const postFeedback = async () => {
         // const headers = {
         //     'Content-Type': 'application/json;charset=UTF-8',
         //     "Access-Control-Allow-Origin": "*",
@@ -60,7 +59,6 @@ const Feedback = (props) => {
         const feedbackdata = feedbacks.data;
         setFeedback(feedbackdata)
     }
-    
     return (
         <div>
             <h1>Feedback:</h1>
