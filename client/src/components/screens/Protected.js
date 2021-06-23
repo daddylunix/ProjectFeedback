@@ -1,18 +1,14 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
-import {Link, Redirect, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import Feedback from "../Feedback";
 
 const Protected = () => {
     const history = useHistory();
     const [ data, setData ] = useState("");
-    const [ fault, setFault ] = useState("");
-    const [ error, setError ] = useState("");
-    const [ feedback, setFeedback ] = useState("");
     const [ userID, setUserID ] = useState("");
-    const [ feedbackBody, setFeedbackBody ] = useState("");
-    const [ rating, setRating ] = useState("");
+
 
         const dataHandler = async (e) => {
             const test = Cookies.get('userAuth');

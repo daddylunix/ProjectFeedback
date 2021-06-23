@@ -1,21 +1,32 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
-import {Link } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import socketIOClient  from "socket.io-client";
+
 
 const Feedback = (props) => {
     const { userID } = props;
 
     const [feedback, setFeedback] = useState([]);
     const [feedbackRequest, setFeedbackRequest] = useState();
+    const [response, setResponse] = useState("");
+
+
 
     useEffect(() => {
         (async () => {
             await getFeedback()
         })()
+        const socket = socketIOClient('http://localhost:5000');
+        socket.on("NEW_FEEDBACK", data => {
+            setResponse(data);
+        });
+
+        return () => socket.disconnect();
+
     }, [userID])
 
-    const postFeedback = async () => {
+    const postFeedback = async (e) => {
+        e.preventDefault();
         const headers = {
             'Content-Type': 'application/json;charset=UTF-8',
             "Access-Control-Allow-Origin": "*",
@@ -27,6 +38,7 @@ const Feedback = (props) => {
                 body: feedbackRequest,
                 rating:5
             }, {headers})
+
         } catch (error) {
             console.log(error);
         }
@@ -47,6 +59,7 @@ const Feedback = (props) => {
     return (
         <div>
             <h1>Feedback:</h1>
+            {response}
             {
                 feedback.length > 0 && feedback.map((feedbackItem, index) => <h3 key={index}>{JSON.stringify(feedbackItem)}</h3>)
             }
