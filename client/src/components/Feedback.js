@@ -4,9 +4,8 @@ import {Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 const Feedback = (props) => {
-    const { feedback } = props;
-
     
+    const { feedback } = props;
     return (
         <div>
             <h1>Feedback:</h1>
