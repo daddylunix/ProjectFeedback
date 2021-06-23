@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const jwt = require("jsonwebtoken");
 
-router.post('/', async (req, res ) => {
+router.get('/', async (req, res ) => {
     if (!req.headers.authorization || req.headers.authorization == "undefined" || req.headers.authorization == undefined) {
         return res.json({msg:"not logged in"})
     } else {
