@@ -32,7 +32,7 @@ const Protected = () => {
             const userid = response.data.msg._id;
             setUserID(userid)
             console.log(UserID);
-            const feedbacks = await axios.get(`http://localhost:5000/feedback/${userid}`, {}, {
+            const feedbacks = await axios.get(`http://localhost:5000/feedback/${userid}`, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Credentials": true,
