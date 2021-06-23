@@ -4,7 +4,7 @@ const User = require('../models/User');
 const jwt = require("jsonwebtoken");
 
 router.get('/', async (req, res ) => {
-    if (!req.headers.authorization || req.headers.authorization == "undefined" || req.headers.authorization == undefined) {
+    if (!req.headers.authorization) {
         return res.json({msg:"not logged in"})
     } else {
         try {
