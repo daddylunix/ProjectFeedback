@@ -43,6 +43,7 @@ const Feedback = (props) => {
         const feedbackdata = feedbacks.data;
         setFeedback(feedbackdata)
     }
+    
     return (
         <div>
             <h1>Feedback:</h1>
