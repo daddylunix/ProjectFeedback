@@ -10,7 +10,7 @@ const Feedback = (props) => {
     return (
         <div>
             <h1>Feedback:</h1>
-            {feedback?.map(feedbackItem => <h3>{JSON.stringify(feedbackItem)}</h3>)}
+            {feedback.length > 0 && feedback.map(feedbackItem => <h3>{JSON.stringify(feedbackItem)}</h3>)}
         </div>
     )
 }

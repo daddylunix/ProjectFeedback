@@ -21,7 +21,7 @@ const Protected = () => {
             history.push('/register')
         }
         try {
-            const response = await axios.get('http://localhost:5000/dashboard', {}, {
+            const response = await axios.get('http://localhost:5000/dashboard', {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Credentials": true,
