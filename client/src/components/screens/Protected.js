@@ -19,8 +19,6 @@ const Protected = () => {
             if(!test) {
                 history.push('/register')
             }
-
-
             try {
                 const response = await axios.get('http://localhost:5000/dashboard',  {
                     headers: {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
-import {Link } from 'react-router-dom';
+import {Link, useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 const RegisterScreen = () => {
@@ -9,6 +9,7 @@ const RegisterScreen = () => {
     const [ password, setPassword ] = useState("");
     const [ error, setError ] = useState("");
     const [ responseData, setResponseData ] = useState("");
+    const history = useHistory();
     const registerHandler = async (e) => {
         e.preventDefault();
         const config = {
@@ -22,6 +23,8 @@ const RegisterScreen = () => {
             console.log(data);
             setResponseData(data);
             Cookies.set('userAuth', data.token )
+            history.push("/protected");
+
         } catch (error) {
             setError(JSON.stringify(error));
             console.log(error);
