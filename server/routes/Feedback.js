@@ -1,10 +1,12 @@
 const router = require('express').Router();
 const Feedback = require('../models/Feedback');
+const ApiError = require("../utils/apiError");
 
-router.post('/feedback/:id', async (req, res) => {
+router.post('/feedback/:id', async (req, res, next) => {
     const userId = req.params.id;
     if(!req.body.body || !req.body.rating ) {
-        return res.json({msg:"Fill everything below."})
+        // TODO: request validation
+        throw new ApiError('Invalid request body', 400)
     }
     try {
         const feedback = await Feedback.create({
@@ -14,18 +16,16 @@ router.post('/feedback/:id', async (req, res) => {
         })
         res.json({feedback});
     } catch (error) {
-        console.log(error);
-        res.json(error);
+       next(error)
     }
 })
 
-router.get('/feedback/:id', async(req, res) => {
+router.get('/feedback/:id', async(req, res, next) => {
     try {
-        const feedbacks = await Feedback.find({user: req.params.id})
+        const feedbacks = await Feedback.find({user: req.params.id}).select('-__v');
         res.json(feedbacks);
     } catch (error) {
-        console.log(error);
-        res.json(error);
+        next(error)
     }
 })
 

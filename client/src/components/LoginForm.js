@@ -5,26 +5,43 @@ import Cookies from 'js-cookie';
 import React from 'react'
 
 const LoginForm = () => {
+    const history = useHistory();
+
     const [ email, setEmail ] = useState("");
     const [ password, setPassword ] = useState("");
-    const history = useHistory();
+
     const loginHandler = async (e) => {
         e.preventDefault();
-        const config = {
-            header: {
-                "Content-Type": "application/json"
-            }
-        }
+
         try {
-            const { data } = await axios.post('http://localhost:5000/api/auth/login', {email, password}, config)
+            const { data } = await axios
+                .post('http://localhost:5000/api/auth/login', {email, password},
+                {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+
             if (!data) console.log("something went wrong, can't login :(")
             console.log(data);
+
             Cookies.set('userAuth', data.token);
             history.push('/protected');
         } catch (error) {
             console.log(error);
         }
     }
+
+    const handleOnChange = (e) => {
+        const value = e.target.value;
+        const inputName = e.target.name
+        if(inputName === 'email') {
+            setEmail(value)
+        }else if(inputName === 'password') {
+            setPassword(value)
+        }
+    }
+
     return (
         <div>
             <form onSubmit={loginHandler}>
@@ -33,18 +50,20 @@ const LoginForm = () => {
                 type="email"
                 required
                 id="email"
+                name='email'
                 placeholder="Email.."
                 value={email}
-                onChange={(e) => {setEmail(e.target.value)}}
+                onChange={handleOnChange}
                 />
                 <br/>
                 <input 
                 type="password"
                 required
                 id="password"
-                placeholder="Email.."
+                name='password'
+                placeholder="Password.."
                 value={password}
-                onChange={(e) => {setPassword(e.target.value)}}
+                onChange={handleOnChange}
                 />
                 <button type="submit">Login</button>
             </form>
