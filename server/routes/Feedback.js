@@ -2,6 +2,17 @@ const router = require('express').Router();
 const Feedback = require('../models/Feedback');
 
 
+
+router.get('/feedback', async(req, res) => {
+    try {
+        const allFeedback = await Feedback.find({})
+        res.json(allFeedback);
+    } catch (error) {
+        console.log(error);
+        res.json(error);
+    }
+})
+
 router.post('/feedback/:id', async (req, res) => {
     const userId = req.params.id;
     if(!req.body.body || !req.body.rating ) {
@@ -29,5 +40,6 @@ router.get('/feedback/:id', async(req, res) => {
         res.json(error);
     }
 })
+
 
 module.exports = router;

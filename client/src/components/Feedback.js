@@ -8,16 +8,14 @@ const Feedback = (props) => {
 
     const [feedback, setFeedback] = useState([]);
     const [feedbackRequest, setFeedbackRequest] = useState();
-    const [response, setResponse] = useState("");
+    const [response, setResponse] = useState([]);
+    const socket = socketIOClient('http://localhost:5000');
 
 
 
     useEffect(() => {
-        (async () => {
-            await getFeedback()
-        })()
-        const socket = socketIOClient('http://localhost:5000');
-        socket.on("NEW_FEEDBACK", data => {
+        socket.connect();
+        socket.on("feedback:read", data => {
             setResponse(data);
         });
 
@@ -27,21 +25,28 @@ const Feedback = (props) => {
 
     const postFeedback = async (e) => {
         e.preventDefault();
-        const headers = {
-            'Content-Type': 'application/json;charset=UTF-8',
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": true,
-        };
-        try {
-            const feedbackPost = await axios.post(`http://localhost:5000/feedback/${userID}`, {
-                user: userID,
-                body: feedbackRequest,
-                rating:5
-            }, {headers})
+        // const headers = {
+        //     'Content-Type': 'application/json;charset=UTF-8',
+        //     "Access-Control-Allow-Origin": "*",
+        //     "Access-Control-Allow-Credentials": true,
+        // };
 
-        } catch (error) {
-            console.log(error);
-        }
+        socket.emit('feedback:create', {
+            user: userID,
+            body: feedbackRequest,
+            rating:5
+        });
+
+        // try {
+        //     const feedbackPost = await axios.post(`http://localhost:5000/feedback/${userID}`, {
+        //         user: userID,
+        //         body: feedbackRequest,
+        //         rating:5
+        //     }, {headers})
+        //
+        // } catch (error) {
+        //     console.log(error);
+        // }
     }
 
     const getFeedback = async () => {
@@ -59,7 +64,7 @@ const Feedback = (props) => {
     return (
         <div>
             <h1>Feedback:</h1>
-            {response}
+            {JSON.stringify(response)}
             {
                 feedback.length > 0 && feedback.map((feedbackItem, index) => <h3 key={index}>{JSON.stringify(feedbackItem)}</h3>)
             }

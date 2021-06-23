@@ -13,7 +13,6 @@ const io = new Server(server, {
     }
 });
 
-const STATIC_CHANNELS = ['global_feedback']
 
 // Middleware
 app.use(express.json());
@@ -38,24 +37,32 @@ app.use('/', require('./routes/Feedback'));
 
 let interval;
 
-io.on("connection", (socket) => {
+const feedbackHandler = require('./handlers/feedback.handler');
+
+const Feedback = require('./models/Feedback');
+
+const onConnection = async (socket) => {
     console.log("New client connected");
-    if (interval) {
-        clearInterval(interval);
-    }
-    interval = setInterval(() => getApiAndEmit(socket), 1000);
+    const allFeedback = await Feedback.find({})
+    socket.emit("feedback:read", allFeedback);
+
+    socket.on("feedback:create", async (payload) => {
+        console.log(payload)
+        await Feedback.create({
+            user: payload.user,
+            body: payload.body,
+            rating: payload.rating
+        })
+        socket.emit('feedback:create', [...allFeedback, payload] )
+    });
+
     socket.on("disconnect", () => {
         console.log("Client disconnected");
-        clearInterval(interval);
     });
-});
+}
 
-const getApiAndEmit = socket => {
-    const response = new Date();
+io.on("connection", onConnection);
 
-    // Emitting a new message. Will be consumed by the client
-    socket.emit("NEW_FEEDBACK", response);
-};
 
 
 // Start server
