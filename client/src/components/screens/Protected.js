@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
-import {Link } from 'react-router-dom';
+import {Link, Redirect, useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import Feedback from "../Feedback";
 
-// Protected Route
-
 const Protected = () => {
+    const history = useHistory();
     const [ data, setData ] = useState("");
     const [ fault, setFault ] = useState("");
     const [ error, setError ] = useState("");
@@ -17,13 +16,12 @@ const Protected = () => {
 
     const dataHandler = async (e) => {
         const test = Cookies.get('userAuth');
-        const headers = {
-            'Content-Type': 'application/json;charset=UTF-8',
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": true,
-        };
+        console.log(test);
+        if(!test || test == undefined || test == "undefined") {
+            history.push('/register')
+        }
         try {
-            const response = await axios.post('http://localhost:5000/dashboard', {}, {
+            const response = await axios.get('http://localhost:5000/dashboard', {}, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Credentials": true,
@@ -44,7 +42,7 @@ const Protected = () => {
             })
             const feedbackdata = feedbacks.data; 
             setFeedback(feedbackdata)
-            console.log(feedbackdata);
+            console.log(feedback);
             console.log(response.data);
             setData(response.data.msg);
         } catch (error) {
