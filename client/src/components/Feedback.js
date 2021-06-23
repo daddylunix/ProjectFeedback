@@ -5,7 +5,6 @@ import Cookies from 'js-cookie';
 
 const Feedback = (props) => {
     const { userID } = props;
-
     const [feedback, setFeedback] = useState([]);
     const [feedbackRequest, setFeedbackRequest] = useState();
 
@@ -15,7 +14,8 @@ const Feedback = (props) => {
         })()
     }, [userID])
 
-    const postFeedback = async () => {
+    const postFeedback = async (e) => {
+        e.preventDefault();
         const headers = {
             'Content-Type': 'application/json;charset=UTF-8',
             "Access-Control-Allow-Origin": "*",
@@ -43,7 +43,6 @@ const Feedback = (props) => {
         const feedbackdata = feedbacks.data;
         setFeedback(feedbackdata)
     }
-    
     return (
         <div>
             <h1>Feedback:</h1>
