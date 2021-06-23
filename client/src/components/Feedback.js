@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 
 const Feedback = (props) => {
     const { userID } = props;
+
     const [feedback, setFeedback] = useState([]);
     const [feedbackRequest, setFeedbackRequest] = useState();
 
