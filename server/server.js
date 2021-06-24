@@ -3,7 +3,6 @@ const http = require('http');
 const server = http.createServer(app);
 const io = require('./socket').init(server);
 
-const setupHandlers = require('./handlers');
 const Feedback = require("./models/Feedback");
 
 const getFeedback = async () => await Feedback.find({})

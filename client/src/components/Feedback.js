@@ -8,7 +8,8 @@ let socket;
 const Feedback = (props) => {
     const { userID } = props;
     const [feedback, setFeedback] = useState([]);
-    const [feedbackRequest, setFeedbackRequest] = useState();
+    const [feedbackRequest, setFeedbackRequest] = useState('');
+    const [rating, setRating] = useState(1);
 
     useEffect(() => {
         socket = io('http://localhost:5000');
@@ -33,17 +34,23 @@ const Feedback = (props) => {
         e.preventDefault();
 
         console.log('posting feedback');
-        const feedbacks = await axios.post(`http://localhost:5000/feedback/${userID}`, {
-            user: userID,
-            body: feedbackRequest,
-            rating:5
-        }, {
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Credentials": true,
-                "Content-Type": "application/json",
-            }
-        })
+        try{
+            const feedbacks = await axios.post(`http://localhost:5000/feedback/${userID}`, {
+                user: userID,
+                body: feedbackRequest,
+                rating
+            }, {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true,
+                    "Content-Type": "application/json",
+                }
+            })
+        }catch(e){
+            console.log(e);
+        }
+
+        setFeedbackRequest('')
 
         }
 
@@ -61,7 +68,11 @@ const Feedback = (props) => {
 
     const onChange = (e) => {
         const value = e.target.value;
-        setFeedbackRequest(value);
+        if(e.target.name === 'rating'){
+            setRating(parseInt(value));
+        }else{
+            setFeedbackRequest(value);
+        }
     }
 
     return (
@@ -74,8 +85,18 @@ const Feedback = (props) => {
                 <input
                     placeholder="Feedback body"
                     id="feedback-body"
+                    name='feedback-body'
+                    value={feedbackRequest}
                     onChange={onChange}/>
-                <input placeholder="rating" />
+                <input
+                    placeholder="rating"
+                    type='number'
+                    name='rating'
+                    value={rating}
+                    onChange={onChange}
+                    max='5'
+                    min='1'
+                />
                 <button type="submit" className="btn btn-primary">Submit Data</button>
             </form>
         </div>
