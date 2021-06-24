@@ -1,52 +1,51 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
 
-import socketIOClient  from "socket.io-client";
+import io from "socket.io-client";
 
+let socket;
 
 const Feedback = (props) => {
     const { userID } = props;
     const [feedback, setFeedback] = useState([]);
     const [feedbackRequest, setFeedbackRequest] = useState();
-    const [response, setResponse] = useState([]);
-    const socket = socketIOClient('http://localhost:5000');
-
-
 
     useEffect(() => {
-        socket.connect();
-        socket.on("feedback:read", data => {
-            setResponse(data);
+        socket = io('http://localhost:5000');
+
+        socket.on("feedback:all", data => {
+            console.log(socket.id)
+            setFeedback(data);
         });
 
         return () => socket.disconnect();
+    }, []);
 
-    }, [userID])
 
-    const postFeedback = async () => {
-        // const headers = {
-        //     'Content-Type': 'application/json;charset=UTF-8',
-        //     "Access-Control-Allow-Origin": "*",
-        //     "Access-Control-Allow-Credentials": true,
-        // };
+    useEffect(() => {
+        (async () => {
+            await getFeedback();
+        })()
+    }, [])
 
-        socket.emit('feedback:create', {
+
+    const postFeedback = async (e) => {
+        e.preventDefault();
+
+        console.log('posting feedback');
+        const feedbacks = await axios.post(`http://localhost:5000/feedback/${userID}`, {
             user: userID,
             body: feedbackRequest,
             rating:5
-        });
+        }, {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true,
+                "Content-Type": "application/json",
+            }
+        })
 
-        // try {
-        //     const feedbackPost = await axios.post(`http://localhost:5000/feedback/${userID}`, {
-        //         user: userID,
-        //         body: feedbackRequest,
-        //         rating:5
-        //     }, {headers})
-        //
-        // } catch (error) {
-        //     console.log(error);
-        // }
-    }
+        }
 
     const getFeedback = async () => {
         const feedbacks = await axios.get(`http://localhost:5000/feedback/${userID}`, {}, {
@@ -59,10 +58,15 @@ const Feedback = (props) => {
         const feedbackdata = feedbacks.data;
         setFeedback(feedbackdata)
     }
+
+    const onChange = (e) => {
+        const value = e.target.value;
+        setFeedbackRequest(value);
+    }
+
     return (
         <div>
             <h1>Feedback:</h1>
-            {JSON.stringify(response)}
             {
                 feedback.length > 0 && feedback.map((feedbackItem, index) => <h3 key={index}>{JSON.stringify(feedbackItem)}</h3>)
             }
@@ -70,9 +74,8 @@ const Feedback = (props) => {
                 <input
                     placeholder="Feedback body"
                     id="feedback-body"
-                    value={feedbackRequest}
-                    onChange={(e) => {setFeedbackRequest(e.target.value)}}/>
-                <input placeholder="rating"></input>
+                    onChange={onChange}/>
+                <input placeholder="rating" />
                 <button type="submit" className="btn btn-primary">Submit Data</button>
             </form>
         </div>

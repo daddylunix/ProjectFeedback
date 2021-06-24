@@ -1,84 +1,30 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const app = express();
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
+const app = require('./app');
 const http = require('http');
 const server = http.createServer(app);
-const { Server } = require("socket.io");
-const io = new Server(server, {
-    cors: {
-        origin: "http://localhost:3000",
-        methods: ["GET", "POST"]
-    }
-});
+const io = require('./socket').init(server);
 
+const setupHandlers = require('./handlers');
+const Feedback = require("./models/Feedback");
 
-// Middleware
-app.use(express.json());
-app.use(cors({credentials:true}));
-app.use(cookieParser());
-
-
-// Connect to database
-mongoose.connect('mongodb://localhost:27017/react-user-auth', {
-    useNewUrlParser:true,
-    useCreateIndex:true,
-    useUnifiedTopology:true,
-    useFindAndModify:true
-},
-    console.log("Connected to MongoDB")
-)
-
-// Routes 
-app.use("/api/auth", require("./routes/auth"));
-app.use('/dashboard', require('./routes/dashboard'));
-app.use('/', require('./routes/Feedback'));
-
-app.use((err, req, res, next) => {
-    err.statusCode = err.statusCode || 500;
-    err.status = err.status || 'error';
-
-    console.log(err);
-    res.status(err.statusCode).json({
-        status: err.status,
-        message: err.message
-    })
-})
-
-let interval;
-
-const feedbackHandler = require('./handlers/feedback.handler');
-
-const Feedback = require('./models/Feedback');
+const getFeedback = async () => await Feedback.find({})
 
 const onConnection = async (socket) => {
-    console.log("New client connected");
-    const allFeedback = await Feedback.find({})
-    socket.emit("feedback:read", allFeedback);
+    console.log('Client connected with id: ' + socket.id);
 
-    socket.on("feedback:create", async (payload) => {
-        console.log(payload)
-        await Feedback.create({
-            user: payload.user,
-            body: payload.body,
-            rating: payload.rating
-        })
-        socket.emit('feedback:create', [...allFeedback, payload] )
+    socket.on("connect_error", (err) => {
+        console.log(`connect_error due to ${err.message}`);
     });
 
-    socket.on("disconnect", () => {
+    socket.on("disconnect", (e) => {
+        console.log(e)
         console.log("Client disconnected");
     });
 }
 
 io.on("connection", onConnection);
 
-
 // Start server
 server.listen(5000, () => console.log('Server running on port 5000'))
-
-
 
 process.on("unhandledRejection", (err, promise) => {
     console.log(`Logged Error: ${err}`);

@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const Feedback = require('../models/Feedback');
 const ApiError = require("../utils/apiError");
+const io = require('../socket');
+
 
 router.get('/feedback', async(req, res) => {
     try {
@@ -24,7 +26,10 @@ router.post('/feedback/:id', async (req, res, next) => {
             user: userId,
             body: req.body.body,
             rating: req.body.rating
-        })
+        });
+
+        io.getIO().emit('feedback:all', await Feedback.find({}));
+
         res.json({feedback});
     } catch (error) {
        next(error)

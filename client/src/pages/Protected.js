@@ -14,7 +14,7 @@ const Protected = () => {
         const dataHandler = async (e) => {
             const test = Cookies.get('userAuth');
             if(!test) {
-                history.push('/register')
+                history.push('/login')
             }
 
             try {
