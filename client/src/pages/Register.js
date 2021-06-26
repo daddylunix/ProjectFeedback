@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import axios from 'axios';
 import {Link, useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import Button from '@material-ui/core/button'
+import Card from '@material-ui/core/card';
+import TextField from '@material-ui/core/TextField';
 
 const Register = () => {
     const [ username, setUsername ] = useState("");
@@ -33,35 +36,47 @@ const Register = () => {
     }
     return (
     <div>
-        <form className="register-screen__form" onSubmit={registerHandler}>
+        <center>
+            <br/>
+            <form className="register-screen__form" onSubmit={registerHandler}>
             <h3>Register</h3>
-            <input
-            type="text"
-            required 
-            id="name"
-            placeholder="Enter username"
-            value={username} onChange={(e) => {setUsername(e.target.value)}}/>
-            <br/>
-            <input
-            type="text"
-            required 
-            id="email"
-            placeholder="Enter an Email"
-            value={email} onChange={(e) => {setEmail(e.target.value)}}/>
-            <br/>
-             <input
-            type="text"
-            required 
-            id="password"
-            placeholder="Enter a password"
-            value={password} onChange={(e) => {setPassword(e.target.value)}}/>
-            <br/>
-            <button type="submit" className="btn btn-primary">Register</button>
+            <TextField 
+            id="name" 
+            required
+            label="Username" 
+            value={username} 
+            onChange={(e) => {setUsername(e.target.value)}}
+            variant="outlined"
+            />
+            <br/><br/>
+            <TextField 
+            type="email"
+            id="email" 
+            label="Email" 
+            value={email} 
+            onChange={(e) => {setEmail(e.target.value)}}
+            required
+            variant="outlined"
+            />
+            <br/><br/>
+            <TextField 
+            id="password" 
+            label="Password" 
+            value={password} 
+            onChange={(e) => {setPassword(e.target.value)}}
+            required
+            variant="outlined"
+            />
+            <br/><br/>
+            <Button variant="contained" color="primary" type="submit" className="btn btn-primary">Register</Button>
             </form>
             {error}
             <h3>{responseData.token}</h3>
+            </center>
     </div>
+    
     )
 }
 
 export default Register;
+{/* <TextField id="outlined-basic" label="Outlined" variant="outlined" /> */}
