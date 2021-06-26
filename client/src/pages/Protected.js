@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
-import {Link, Redirect, useHistory } from 'react-router-dom';
+import {useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import Feedback from "../components/Feedback";
 
