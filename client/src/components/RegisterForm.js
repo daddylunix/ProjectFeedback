@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from 'axios';
-import {Link, useHistory } from 'react-router-dom';
+import {useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import Button from '@material-ui/core/button'
-import Card from '@material-ui/core/card';
 import TextField from '@material-ui/core/TextField';
 
 const RegisterForm = () => {
