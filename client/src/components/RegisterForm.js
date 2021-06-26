@@ -61,6 +61,7 @@ const RegisterForm = () => {
             <br/><br/>
             <TextField 
             id="password" 
+            type="password"
             label="Password" 
             value={password} 
             onChange={(e) => {setPassword(e.target.value)}}
