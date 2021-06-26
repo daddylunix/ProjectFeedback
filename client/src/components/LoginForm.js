@@ -6,13 +6,11 @@ import React from 'react'
 
 const LoginForm = () => {
     const history = useHistory();
-
     const [ email, setEmail ] = useState("");
     const [ password, setPassword ] = useState("");
 
     const loginHandler = async (e) => {
         e.preventDefault();
-
         try {
             const { data } = await axios
                 .post('http://localhost:5000/api/auth/login', {email, password},
