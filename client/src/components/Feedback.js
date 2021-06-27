@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
-
+import Button from '@material-ui/core/button'
+import TextField from '@material-ui/core/TextField';
 
 const Feedback = (props) => {
     const { userID } = props;
     const [feedback, setFeedback] = useState([]);
+    const [rating, setRating ] = useState([]);
     const [feedbackRequest, setFeedbackRequest] = useState();
 
     useEffect(() => {
@@ -24,7 +26,7 @@ const Feedback = (props) => {
             const feedbackPost = await axios.post(`http://localhost:5000/feedback/${userID}`, {
                 user: userID,
                 body: feedbackRequest,
-                rating:5
+                rating:rating
             }, {headers})
         } catch (error) {
             console.log(error);
@@ -48,14 +50,27 @@ const Feedback = (props) => {
             {
                 feedback.length > 0 && feedback.map((feedbackItem, index) => <h3 key={index}>{JSON.stringify(feedbackItem)}</h3>)
             }
+            <br/>
             <form onSubmit={postFeedback}>
-                <input
-                    placeholder="Feedback body"
-                    id="feedback-body"
-                    value={feedbackRequest}
-                    onChange={(e) => {setFeedbackRequest(e.target.value)}}/>
-                <input placeholder="rating"></input>
-                <button type="submit" className="btn btn-primary">Submit Data</button>
+                <TextField 
+                placeholder="Feedback :D"
+                id="feedback-body"
+                value={feedbackRequest}
+                onChange={(e) => {setFeedbackRequest(e.target.value)}}
+                variant="outlined"
+                required
+                />
+                <TextField
+                type="number"
+                placeholder="Rating 1/5"
+                id="rating-body"
+                value={rating}
+                onChange={(e) => {setRating(e.target.value)}}
+                variant="outlined"
+                required
+                />
+                <br/><br/>
+                <Button variant="contained" color="primary" type="submit" className="btn btn-primary">Submit Feedback</Button>
             </form>
         </div>
     )

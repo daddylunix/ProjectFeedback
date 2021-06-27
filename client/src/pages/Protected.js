@@ -15,7 +15,6 @@ const Protected = () => {
             if(!test) {
                 history.push('/login')
             }
-
             try {
                 const response = await axios.get('http://localhost:5000/dashboard',  {
                     headers: {
