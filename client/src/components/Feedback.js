@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
-
+import Button from '@material-ui/core/button'
+import TextField from '@material-ui/core/TextField';
 import io from "socket.io-client";
 
 let socket;
@@ -82,22 +83,25 @@ const Feedback = (props) => {
                 feedback.length > 0 && feedback.map((feedbackItem, index) => <h3 key={index}>{JSON.stringify(feedbackItem)}</h3>)
             }
             <form onSubmit={postFeedback}>
-                <input
-                    placeholder="Feedback body"
-                    id="feedback-body"
-                    name='feedback-body'
-                    value={feedbackRequest}
-                    onChange={onChange}/>
-                <input
-                    placeholder="rating"
-                    type='number'
-                    name='rating'
-                    value={rating}
-                    onChange={onChange}
-                    max='5'
-                    min='1'
+                <TextField
+                placeholder="Feedback :D"
+                id="feedback-body"
+                value={feedbackRequest}
+                onChange={(e) => {setFeedbackRequest(e.target.value)}}
+                variant="outlined"
+                required
                 />
-                <button type="submit" className="btn btn-primary">Submit Data</button>
+                <TextField
+                type="number"
+                placeholder="Rating 1/5"
+                id="rating-body"
+                value={rating}
+                onChange={(e) => {setRating(e.target.value)}}
+                variant="outlined"
+                required
+                />
+                <br/><br/>
+                <Button variant="contained" color="primary" type="submit" className="btn btn-primary">Submit Feedback</Button>
             </form>
         </div>
     )

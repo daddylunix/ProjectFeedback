@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import {useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import Feedback from "../components/Feedback";
 
@@ -10,13 +10,11 @@ const Protected = () => {
     const [ error, setError ] = useState("");
     const [ userID, setUserID ] = useState("");
 
-
         const dataHandler = async (e) => {
             const test = Cookies.get('userAuth');
             if(!test) {
                 history.push('/login')
             }
-
             try {
                 const response = await axios.get('http://localhost:5000/dashboard',  {
                     headers: {

@@ -1,18 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from 'axios';
-import {Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import React from 'react'
+import Button from '@material-ui/core/button'
+import TextField from '@material-ui/core/TextField';
 
 const LoginForm = () => {
     const history = useHistory();
-
     const [ email, setEmail ] = useState("");
     const [ password, setPassword ] = useState("");
 
     const loginHandler = async (e) => {
         e.preventDefault();
-
         try {
             const { data } = await axios
                 .post('http://localhost:5000/api/auth/login', {email, password},
@@ -44,9 +44,10 @@ const LoginForm = () => {
 
     return (
         <div>
+            <center>
             <form onSubmit={loginHandler}>
                 <h3>Login</h3>
-                <input 
+                <TextField 
                 type="email"
                 required
                 id="email"
@@ -54,9 +55,10 @@ const LoginForm = () => {
                 placeholder="Email.."
                 value={email}
                 onChange={handleOnChange}
+                variant="outlined"
                 />
-                <br/>
-                <input 
+                <br/><br/>
+                <TextField 
                 type="password"
                 required
                 id="password"
@@ -64,9 +66,12 @@ const LoginForm = () => {
                 placeholder="Password.."
                 value={password}
                 onChange={handleOnChange}
+                variant="outlined"
                 />
-                <button type="submit">Login</button>
+                <br/><br/>
+                <Button variant="contained" color="primary" type="submit" className="btn btn-primary">Login</Button>
             </form>
+            </center>
         </div>
     )
 }
