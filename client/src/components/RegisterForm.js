@@ -43,7 +43,6 @@ const RegisterForm = () => {
             email: setEmail,
             password: setPassword
         }
-
         fields[fieldName](value);
     }
 

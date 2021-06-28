@@ -18,7 +18,6 @@ const Feedback = (props) => {
 
     const postFeedback = async (e) => {
         e.preventDefault();
-
         console.log('posting feedback');
         try{
             const newFeedback = await axios.post(`http://localhost:5000/feedback/${userID}`, {
