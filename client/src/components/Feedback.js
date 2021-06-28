@@ -13,7 +13,7 @@ const Feedback = (props) => {
         (async () => {
             await getFeedback();
         })()
-    }, [])
+    }, [userID])
 
 
     const postFeedback = async (e) => {
