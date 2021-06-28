@@ -11,7 +11,7 @@ const Feedback = (props) => {
 
     useEffect(() => {
         (async () => {
-            await getFeedback();
+           if(userID) await getFeedback();
         })()
     }, [userID])
 

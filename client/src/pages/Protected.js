@@ -10,7 +10,7 @@ const Protected = () => {
     const [ error, setError ] = useState("");
     const [ userID, setUserID ] = useState("");
 
-        const dataHandler = async (e) => {
+        const dataHandler = async () => {
             const test = Cookies.get('userAuth');
             if(!test) {
                 history.push('/login')
