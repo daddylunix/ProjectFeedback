@@ -77,7 +77,7 @@ const RegisterForm = () => {
             <TextField 
             id="password" 
             type="password"
-            name="passwor"
+            name="password"
             label="Password" 
             value={password}
             onChange={onChange}
