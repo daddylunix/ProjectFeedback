@@ -40,7 +40,7 @@ const Protected = () => {
     }
     useEffect(() => {
         (async () => dataHandler())();
-    }, [userID])
+    }, [])
 
     return (
         <div>
