@@ -14,7 +14,6 @@ const Feedback = (props) => {
 
     useEffect(() => {
         socket = io('http://localhost:5000');
-
         socket.on("feedback:all", data => {
             console.log(socket.id)
             setFeedback(data);
@@ -33,7 +32,6 @@ const Feedback = (props) => {
 
     const postFeedback = async (e) => {
         e.preventDefault();
-
         console.log('posting feedback');
         try{
             const feedbacks = await axios.post(`http://localhost:5000/feedback/${userID}`, {

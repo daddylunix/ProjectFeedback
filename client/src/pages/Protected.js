@@ -39,7 +39,6 @@ const Protected = () => {
                 }
             }
     }
-
     useEffect(() => {
         (async () => dataHandler())();
     }, [userID])
