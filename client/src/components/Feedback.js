@@ -42,7 +42,7 @@ const Feedback = (props) => {
         }
 
     const getFeedback = async () => {
-        const feedbacks = await axios.get(`http://localhost:5000/feedback/${userID}`, {}, {
+        const feedbacks = await axios.get(`http://localhost:5000/feedback/${userID}`, {
             headers: {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Credentials": true,
