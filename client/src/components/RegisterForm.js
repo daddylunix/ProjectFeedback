@@ -33,6 +33,20 @@ const RegisterForm = () => {
             console.log(error);
         }
     }
+
+    const onChange = (e) => {
+        const value = e.target.value;
+        const fieldName = e.target.name;
+
+        const fields = {
+            username: setUsername,
+            email: setEmail,
+            password: setPassword
+        }
+
+        fields[fieldName](value);
+    }
+
     return (
     <div>
         <center>
@@ -40,20 +54,22 @@ const RegisterForm = () => {
             <form className="register-screen__form" onSubmit={registerHandler}>
             <h3>Register</h3>
             <TextField 
-            id="name" 
+            id="username"
+            name="username"
             required
             label="Username" 
             value={username} 
-            onChange={(e) => {setUsername(e.target.value)}}
+            onChange={onChange}
             variant="outlined"
             />
             <br/><br/>
             <TextField 
             type="email"
-            id="email" 
+            id="email"
+            name="email"
             label="Email" 
-            value={email} 
-            onChange={(e) => {setEmail(e.target.value)}}
+            value={email}
+            onChange={onChange}
             required
             variant="outlined"
             />
@@ -61,9 +77,10 @@ const RegisterForm = () => {
             <TextField 
             id="password" 
             type="password"
+            name="passwor"
             label="Password" 
-            value={password} 
-            onChange={(e) => {setPassword(e.target.value)}}
+            value={password}
+            onChange={onChange}
             required
             variant="outlined"
             />
