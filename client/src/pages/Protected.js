@@ -24,9 +24,8 @@ const Protected = () => {
                         Authorization: test
                     }
                 })
-
-
                 const userid = response.data.msg._id;
+                console.log(userid);
                 setUserID(userid)
                 setData(response.data.msg);
                 if(error){

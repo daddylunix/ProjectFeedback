@@ -4,9 +4,10 @@ const ApiError = require("../utils/apiError");
 const io = require('../socket');
 
 
-router.get('/feedback', async(req, res) => {
+router.get('/feedback/:id', async(req, res) => {
+    const userId = req.params.id;
     try {
-        const allFeedback = await Feedback.find({})
+        const allFeedback = await Feedback.findById(userId);
         res.json(allFeedback);
     } catch (error) {
         console.log(error);
