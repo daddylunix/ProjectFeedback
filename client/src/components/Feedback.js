@@ -2,27 +2,12 @@ import { useState, useEffect } from "react";
 import axios from 'axios';
 import Button from '@material-ui/core/button'
 import TextField from '@material-ui/core/TextField';
-import io from "socket.io-client";
-
-let socket;
 
 const Feedback = (props) => {
     const { userID } = props;
     const [feedback, setFeedback] = useState([]);
     const [feedbackRequest, setFeedbackRequest] = useState('');
     const [rating, setRating] = useState(1);
-
-    useEffect(() => {
-        socket = io('http://localhost:5000');
-
-        socket.on("feedback:all", data => {
-            console.log(socket.id)
-            setFeedback(data);
-        });
-
-        return () => socket.disconnect();
-    }, []);
-
 
     useEffect(() => {
         (async () => {
@@ -36,7 +21,7 @@ const Feedback = (props) => {
 
         console.log('posting feedback');
         try{
-            const feedbacks = await axios.post(`http://localhost:5000/feedback/${userID}`, {
+            const newFeedback = await axios.post(`http://localhost:5000/feedback/${userID}`, {
                 user: userID,
                 body: feedbackRequest,
                 rating
@@ -47,6 +32,8 @@ const Feedback = (props) => {
                     "Content-Type": "application/json",
                 }
             })
+            const feedbackList = [...feedback, newFeedback.data.feedback];
+            setFeedback(feedbackList);
         }catch(e){
             console.log(e);
         }
